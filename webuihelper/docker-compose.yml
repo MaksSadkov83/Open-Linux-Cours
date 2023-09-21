@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    volumes:
+      - ./compiled:/compiled
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    environment:
+      DJANGO_SUPERUSER_PASSWORD: 123456789abc
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_EMAIL: test@mail.com
+      CHECKER_SOURCE_PATH: /task-checker
+      COMPILED_CHECKERS_PATH: /compiled
+      DB_HOST: db
+      DB_NAME: uihelper
+      DB_PASSWORD: secret
+      DB_PORT: 5432
+      DB_USER: admin
+      DJANGO_SETTINGS_MODULE: webuihelper.settings
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: uihelper
+volumes:
+  postgres_data:
